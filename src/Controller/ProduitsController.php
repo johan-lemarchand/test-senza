@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Produits;
 use App\Form\ProduitsType;
 use App\Repository\ProduitsRepository;
-use App\Service\FileUploader;
+use App\Services\ImageUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,10 +42,10 @@ class ProduitsController extends AbstractController
     /**
      * @Route("/produit/add", name="produit_ajouter")
      * @param Request $request
-     * @param FileUploader $fileUploader
+     * @param ImageUploader $imageUploader
      * @return RedirectResponse|Response
      */
-    public function add(Request $request, FileUploader $fileUploader)
+    public function add(Request $request, ImageUploader $imageUploader )
     {
         $produit = new Produits();
 
@@ -55,18 +55,18 @@ class ProduitsController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()){
 
-            $images = $form->get('photos')->getData();
+            $file = $form->get('photos')->getData();
+            dump($file);
 
-            if ($images) {
-                $imageName = $fileUploader->upload($images);
-                $produit->setPhotos($imageName);
+            if ($imageUploader->upload($file)) {
+                $produit->setPhotos($file->getClientOriginalName());
             }
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($produit);
             $em->flush();
 
-            $this->addFlash('success', 'Produit ajouté');
+            $this->addFlash('message', 'Produit ajouté');
             return $this->redirectToRoute('home');
         }
 

@@ -5,10 +5,13 @@
 {% block body %}
 
 <div class="container mt-5">
+    {% for message in app.flashes('message') %}
+        <div class="alert alert-success" role="alert">{{ message }}</div>
+    {% endfor %}
     <div class="row">
         {% for produits in produit %}
         <div class="card m-4" style="width: 18rem;">
-            <img class="card-img-top" src="{{ produits.photos }}" alt="photos du produit">
+            <img class="card-img-top" src="{{ produits.photos }} {#{{ asset('/uploads/'~ produits.photos) }}#}" alt="photos du produit">
             <div class="card-body d-flex flex-column justify-content-between ">
                 <h5 class="card-title d-flex justify-content-center ">{{ produits.nom }}</h5>
                <p class="d-flex justify-content-center"> {{ produits.description }}</p>
