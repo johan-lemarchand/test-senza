@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}accueil{% endblock %}
+
+{% block body %}
+
+<div class="container mt-5">
+    <div class="row">
+        {% for produits in produit %}
+        <div class="card m-4" style="width: 18rem;">
+            <img class="card-img-top" src="{{ produits.photos }}" alt="photos du produit">
+            <div class="card-body d-flex flex-column justify-content-between ">
+                <h5 class="card-title d-flex justify-content-center ">{{ produits.nom }}</h5>
+               <p class="d-flex justify-content-center"> {{ produits.description }}</p>
+                <div class="d-flex justify-content-between">
+                    <span class="badge badge-danger d-flex align-items-center ">{{ produits.prix }} euros</span>
+                <a href="{{ path('produit_read', {id: produits.id}) }}" class="btn btn-primary">Voir la fiche</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
